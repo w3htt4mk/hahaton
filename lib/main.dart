@@ -28,27 +28,27 @@ class HomePage extends StatelessWidget {
             children: <Widget>[
               Column(
                 children: <Widget>[
-                  FadeAnimation(1, Text("Добро пожаловать!", style: TextStyle(
+                  /*FadeAnimation(1, */Text("Добро пожаловать!", style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 35,
                     color: Colors.white
-                  ),)),
+                  ),/*)*/),
                   SizedBox(height: 20,),
-                  FadeAnimation(1.2, Text("Мобильная версия для ПАК Скит-Актив. Приложение для подачи заявки инициатором и отслеживания работы по ней.",
+                 /* FadeAnimation(1.2, */Text("Мобильная версия для ПАК Скит-Актив. Приложение для подачи заявки инициатором и отслеживания работы по ней.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white38,
                         fontSize: 20
-                    ),)),
+                    ),/*)*/),
                 ],
               ),
-              FadeAnimation(1.4, Container(
+              /*FadeAnimation(1.4, */Container(
                 height: MediaQuery.of(context).size.height / 3,
                 child: Image.asset('assets/illustration2.png', fit: BoxFit.fill,),
-              )),
+              )/*)*/,
               Column(
                 children: <Widget>[
-                  FadeAnimation(1.4, Padding(
+                  /*FadeAnimation(1.4, */Padding(
                     padding: EdgeInsets.symmetric(horizontal: 0),
                     child: Container(
                       padding: EdgeInsets.only(top: 3, left: 3),
@@ -73,9 +73,9 @@ class HomePage extends StatelessWidget {
                         ),),
                       ),
                     ),
-                  )),
+                  )/*)*/,
                   SizedBox(height: 20,),
-                  FadeAnimation(1.4, Padding(
+                  /*FadeAnimation(1.4, */Padding(
                     padding: EdgeInsets.symmetric(horizontal: 0),
                     child: Container(
                       padding: EdgeInsets.only(top: 3, left: 3),
@@ -100,7 +100,7 @@ class HomePage extends StatelessWidget {
                         ),),
                       ),
                     ),
-                  )),
+                  )/*)*/,
                 ],
               )
             ],

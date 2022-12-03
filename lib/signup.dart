@@ -28,26 +28,26 @@ class SignupPage extends StatelessWidget {
             children: <Widget>[
               Column(
                 children: <Widget>[
-                  FadeAnimation(1, Text("Зарегистрироваться", style: TextStyle(
+                  /*FadeAnimation(1, */Text("Зарегистрироваться", style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
                       color: Colors.white
-                  ),)),
+                  ),/*)*/),
                   SizedBox(height: 20,),
-                  FadeAnimation(1.2, Text("Создать новый аккаунт", style: TextStyle(
+                  /*FadeAnimation(1.2, */Text("Создать новый аккаунт", style: TextStyle(
                       fontSize: 20,
                       color: Colors.white38
-                  ),)),
+                  ),/*)*/),
                 ],
               ),
               Column(
                 children: <Widget>[
-                  FadeAnimation(1.2, makeInput(label: "Имя", icon: Icon(Icons.person, color: Colors.white70,))),
-                  FadeAnimation(1.3, makeInput(label: "Почта", icon: Icon(Icons.mail, color: Colors.white70,))),
-                  FadeAnimation(1.4, makeInput(label: "Пароль", obscureText: true, icon: Icon(Icons.lock, color: Colors.white70,))),
+                  /*FadeAnimation(1.2, */makeInput(label: "Имя", icon: Icon(Icons.person, color: Colors.white70,)/*)*/),
+                  /*FadeAnimation(1.3, */makeInput(label: "Почта", icon: Icon(Icons.mail, color: Colors.white70,)/*)*/),
+                  /*FadeAnimation(1.4, */makeInput(label: "Пароль", obscureText: true, icon: Icon(Icons.lock, color: Colors.white70,)/*)*/),
                 ],
               ),
-              FadeAnimation(1.4, Padding(
+              /*FadeAnimation(1.4, */Padding(
                 padding: EdgeInsets.symmetric(horizontal: 40),
                 child: Container(
                   padding: EdgeInsets.only(top: 3, left: 3),
@@ -70,7 +70,7 @@ class SignupPage extends StatelessWidget {
                     ),),
                   ),
                 ),
-              )),
+              )/*)*/,
             ],
           ),
         ),

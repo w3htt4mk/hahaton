@@ -3,14 +3,48 @@ import 'package:skit_active/custombotnav.dart';
 import 'package:skit_active/enums.dart';
 import 'package:skit_active/help.dart';
 
+import 'package:glpi_dart/glpi_dart.dart';
+
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key, this.sessionToken});
+
+  final String? sessionToken;
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
+  late String _profilename;
+
+  @override
+  void initState() {
+    super.initState();
+    _getname();
+  }
+
+  _getname() async{
+    String sessionToken = widget.sessionToken!;
+    String sessionUser;
+    GlpiClient client = GlpiClient("https://hakahelp.admhmao.ru/apirest.php");
+    GlpiClient client2 = GlpiClient("https://hakahelp.admhmao.ru/apirest.php/get-active-profile");
+    await client.initSessionUserToken("7RAPzlZMsU2UIgsrUw49wXlPiGdYcEUMyoTbnPOT");
+    try {
+      final response = await client.getActiveProfile();
+      sessionUser = response['name'];
+
+      _profilename = sessionUser;
+
+
+    } on GlpiException catch (e) {
+      // In case of will get the http status code (e.code) and the message (e.reason['error'])
+      print('${e.code} - ${e.error} - ${e.message}');
+    }
+
+    print(_profilename);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             children: [
               SizedBox(height: 20),
-              Text("Матвей Колесниченко", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),),
+              Text("Пользователь", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),),
               SizedBox(height: 10),
               Text("w3htt4m.k@gmail.com", style: TextStyle(color: Colors.white70, fontSize: 15)),
               SizedBox(height: 40),
@@ -47,7 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 press: () => {},
               ),
               ProfileMenu(
-                text: "Настройка",
+                text: "Настройки",
                 icon: Icon(Icons.settings, color: Colors.white70,),
                 press: () {},
               ),
