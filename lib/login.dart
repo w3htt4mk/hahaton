@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:skit_active/animation/FadeAnimation.dart';
 import 'package:skit_active/profile.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-import 'package:glpi_dart/glpi_dart.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -14,29 +14,20 @@ class _LoginPageState extends State<LoginPage> {
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  String baseUrl = "https://hakahelp.admhmao.ru/apirest.php";
 
-  void _login() async{
-    GlpiClient client = GlpiClient(baseUrl);
-    String? sessionToken;
+  void login(String key) async {
+    var headers = {
+      'Authorization': 'Basic ${key}',
+    };
 
-    // Get the session token
-    try {
-      final response =
-      await client.initSessionUsernamePassword(_emailController.text, _passwordController.text);
-      sessionToken = response['session_token'];
-
-
-      Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(sessionToken: sessionToken)));
-
-    } on GlpiException catch (e) {
-      // In case of will get the http status code (e.code) and the message (e.reason['error'])
-      print('${e.code} - ${e.error} - ${e.message}');
-    }
-
-    print(sessionToken);
+    var url = Uri.parse('https://hakahelp.admhmao.ru/apirest.php/initSession/');
+    var res = await http.get(url, headers: headers);
+    if (res.statusCode != 200) throw Exception('http.get error: statusCode= ${res.statusCode}');
+    String jsonsDataString = res.body.toString(); // toString of Response's body is assigned to jsonDataString
+    var _data = jsonDecode(jsonsDataString);
+    print(_data["session_token"]);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(sessionToken: _data["session_token"],)));
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                     padding: EdgeInsets.symmetric(horizontal: 40),
                     child: Column(
                       children: <Widget>[
-                        /*FadeAnimation(1.2, */makeInput(label: "Почта", icon: Icon(Icons.mail, color: Colors.white70,), controller: _emailController/*)*/),
+                        /*FadeAnimation(1.2, */makeInput(label: "Логин", icon: Icon(Icons.person, color: Colors.white70,), controller: _emailController/*)*/),
                         /*FadeAnimation(1.3, */makeInput(label: "Пароль", icon: Icon(Icons.lock, color: Colors.white70,), obscureText: true, controller: _passwordController),/*)*/
                       ],
                     ),
@@ -98,7 +89,10 @@ class _LoginPageState extends State<LoginPage> {
                         minWidth: double.infinity,
                         height: 70,
                         onPressed: () {
-                          _login();
+                          final str = "${_emailController.text}:${_passwordController.text}";
+                          final bytes = utf8.encode(str);
+                          final base64Str = base64.encode(bytes);
+                          login(base64Str);
                         },
                         color: Colors.orange,
                         elevation: 0,

@@ -2,56 +2,51 @@ import 'package:flutter/material.dart';
 import 'package:skit_active/custombotnav.dart';
 import 'package:skit_active/enums.dart';
 import 'package:skit_active/help.dart';
+import 'dart:convert';
 
-import 'package:glpi_dart/glpi_dart.dart';
+import 'package:http/http.dart' as http;
+
+import 'new_request.dart';
+
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key, this.sessionToken});
-
   final String? sessionToken;
-
+  const ProfileScreen(
+      {Key? key, this.sessionToken})
+      : super(key: key);
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
 
-  late String _profilename;
+
+   getname(String? sessionToken) async {
+    var headers = {
+      'Session-Token': '${sessionToken}',
+    };
+
+    var url = Uri.parse('https://hakahelp.admhmao.ru/apirest.php/getActiveProfile/');
+    var res = await http.get(url, headers: headers);
+    if (res.statusCode != 200) throw Exception('http.get error: statusCode= ${res.statusCode}');// toString of Response's body is assigned to jsonDataString
+    var _data = jsonDecode(res.body)["active_profile"]["name"];
+    print(_data);
+  }
 
   @override
   void initState() {
+    getname(widget.sessionToken);
     super.initState();
-    _getname();
-  }
-
-  _getname() async{
-    String sessionToken = widget.sessionToken!;
-    String sessionUser;
-    GlpiClient client = GlpiClient("https://hakahelp.admhmao.ru/apirest.php");
-    GlpiClient client2 = GlpiClient("https://hakahelp.admhmao.ru/apirest.php/get-active-profile");
-    await client.initSessionUserToken("7RAPzlZMsU2UIgsrUw49wXlPiGdYcEUMyoTbnPOT");
-    try {
-      final response = await client.getActiveProfile();
-      sessionUser = response['name'];
-
-      _profilename = sessionUser;
-
-
-    } on GlpiException catch (e) {
-      // In case of will get the http status code (e.code) and the message (e.reason['error'])
-      print('${e.code} - ${e.error} - ${e.message}');
-    }
-
-    print(_profilename);
   }
 
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Color(0xFF1D1D1D),
       appBar: AppBar(
-        title: Text('Профиль', style: TextStyle(color: Colors.white),),
+        title: Text("Профиль", style: TextStyle(color: Colors.white),),
         centerTitle: true,
         backgroundColor: Color(0xFF1D1D1D),
         elevation: 0,
@@ -62,7 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.white,),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavBar(selectedMenu: MenuState.profile,),
+      bottomNavigationBar: CustomBottomNavBar(selectedMenu: MenuState.profile, sessionToken: widget.sessionToken,),
       body: SingleChildScrollView(
         child: Container(
 
@@ -71,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             children: [
               SizedBox(height: 20),
-              Text("Пользователь", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),),
+              Text(/*"${getname(widget.sessionToken).then((id) {return Text("$id");})}"*/"Пользователь", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),),
               SizedBox(height: 10),
               Text("w3htt4m.k@gmail.com", style: TextStyle(color: Colors.white70, fontSize: 15)),
               SizedBox(height: 40),
@@ -83,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ProfileMenu(
                 text: "Настройки",
                 icon: Icon(Icons.settings, color: Colors.white70,),
-                press: () {},
+                press: () {Navigator.push(context, MaterialPageRoute(builder: (context) => NewRequest(sessionToken: widget.sessionToken,)));},
               ),
               ProfileMenu(
                 text: "Справка",

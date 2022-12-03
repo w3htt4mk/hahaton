@@ -8,10 +8,11 @@ class CustomBottomNavBar extends StatelessWidget {
   const CustomBottomNavBar({
     Key? key,
     required this.selectedMenu,
+    this.sessionToken,
   }) : super(key: key);
 
   final MenuState selectedMenu;
-
+  final String? sessionToken;
   @override
   Widget build(BuildContext context) {
     final Color inActiveIconColor = Colors.white70;
@@ -31,21 +32,21 @@ class CustomBottomNavBar extends StatelessWidget {
                   ? PrimaryColor
                   : inActiveIconColor,),
                 onPressed: () =>
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyRequests())),
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyRequests(sessionToken: sessionToken,))),
               ),
               IconButton(
                 icon: Icon(Icons.add, color: MenuState.new_request == selectedMenu
                     ? PrimaryColor
                     : inActiveIconColor,),
                 onPressed: () =>
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => NewRequest())),
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => NewRequest(sessionToken: sessionToken,))),
               ),
               IconButton(
                 icon: Icon(Icons.person, color: MenuState.profile == selectedMenu
                     ? PrimaryColor
                     : inActiveIconColor,),
                 onPressed: () =>
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen())),
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(sessionToken: sessionToken,))),
               ),
             ],
           )),

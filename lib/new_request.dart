@@ -3,13 +3,18 @@ import 'package:file_picker/file_picker.dart';
 import 'custombotnav.dart';
 import 'enums.dart';
 
-const List<String> categorylist = <String>['Категория', '1кат', '2кат', '3кат', '4кат'];
-const List<String> typelist = <String>['Тип', '1тип', '2тип', '3тип', '4тип'];
+import 'package:http/http.dart' as http;
+
+const List<String> categorylist = <String>['Категория'];
+const List<int> urgencylist = <int>[1,2,3,4];
 
 //подкрутить с апи
 
 class NewRequest extends StatefulWidget {
-  const NewRequest({Key? key}) : super(key: key);
+  final String? sessionToken;
+  const NewRequest(
+      {Key? key, this.sessionToken})
+      : super(key: key);
 
   @override
   State<NewRequest> createState() => _NewRequestState();
@@ -17,8 +22,41 @@ class NewRequest extends StatefulWidget {
 
 class _NewRequestState extends State<NewRequest> {
 
+  @override
+  void initState() {
+    print(widget.sessionToken);
+    super.initState();
+  }
+
+  void makerequest(String title, String phone, String description, int urgency) async {
+    var headers = {
+      'Content-Type': 'application/json',
+      'Session-Token': '${widget.sessionToken}',
+    };
+    print(widget.sessionToken);
+
+    var url = Uri.parse('https://hakahelp.admhmao.ru/apirest.php/ticket/');
+    var res = await http.post(url, headers: headers, body: '{"input" : {"name":"${title}", "phone":"${phone}", "content":"${description}", "urgency":${urgency}, "impact":10, "requesttypes_id": 1}}');
+    if (res.statusCode != 201) throw Exception('http.post error: statusCode= ${res.statusCode} ${res.reasonPhrase}');
+    print(res.body);
+
+    /*var url = Uri.parse('https://hakahelp.admhmao.ru/apirest.php/ticket/');
+    var req = new http.MultipartRequest('POST', url)
+      ..fields['uploadManifest'] = '{"input": {"name": "Uploaded document", "phone":"123", "content":"content", "urgency":3, "impact":10, "requesttypes_id": 1, "_filename" : ["${pickedFile?.name}"]}};type=application/json'
+      ..files.add(await http.MultipartFile.fromPath(
+          'filename[0]', '${pickedFile?.path}'));
+    req.headers['Content-Type'] = 'multipart/form-data';
+    req.headers['Session-Token'] = '${widget.sessionToken}';
+    var res = await req.send();
+    if (res.statusCode != 201) throw Exception('http.post error: statusCode= ${res.statusCode}');
+    print(res.stream);*/
+
+  }
+
+
+
   String dropdowncategoryValue = categorylist.first;
-  String dropdowntypeValue = typelist.first;
+  int dropdownurgencyValue = urgencylist.first;
 
 
   PlatformFile? pickedFile;
@@ -30,7 +68,9 @@ class _NewRequestState extends State<NewRequest> {
     });
   }
 
-
+  final phone_controller = TextEditingController();
+  final title_controller = TextEditingController();
+  final description_controller = TextEditingController();
 
   Widget makeInput({label, obscureText = false, icon, controller}) {
     return Column(
@@ -91,7 +131,7 @@ class _NewRequestState extends State<NewRequest> {
           icon: Icon(Icons.arrow_back_ios, size: 20, color: Colors.white,),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavBar(selectedMenu: MenuState.new_request,),
+      bottomNavigationBar: CustomBottomNavBar(selectedMenu: MenuState.new_request, sessionToken: widget.sessionToken),
 
       body: SingleChildScrollView(
         child: Container(
@@ -127,8 +167,8 @@ class _NewRequestState extends State<NewRequest> {
                       }).toList(),
                     ),
                     SizedBox(width: 40,),
-                    DropdownButton<String>(
-                      value: dropdowntypeValue,
+                    DropdownButton<int>(
+                      value: dropdownurgencyValue,
                       icon: const Icon(Icons.arrow_downward),
                       elevation: 16,
                       style: const TextStyle(color: Colors.white70),
@@ -136,26 +176,26 @@ class _NewRequestState extends State<NewRequest> {
                         height: 2,
                         color: Colors.white70,
                       ),
-                      onChanged: (String? value) {
+                      onChanged: (int? value) {
                         // This is called when the user selects an item.
                         setState(() {
-                          dropdowntypeValue = value!;
+                          dropdownurgencyValue = value!;
                         });
                       },
                       dropdownColor: Color(0xFF262626),
-                      items: typelist.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
+                      items: urgencylist.map<DropdownMenuItem<int>>((int value) {
+                        return DropdownMenuItem<int>(
                           value: value,
-                          child: Text(value),
+                          child: Text("${value}"),
                         );
                       }).toList(),
                     ),
                   ],
                 ),
                 SizedBox(height: 20,),
-                makeInput(label: "Телефон", icon: Icon(Icons.phone, color: Colors.white70,),),
-                makeInput(label: "Заголовок", icon: Icon(Icons.title, color: Colors.white70,),),
-                makeInput(label: "Описание", icon: Icon(Icons.text_fields, color: Colors.white70,),),
+                makeInput(label: "Телефон", icon: Icon(Icons.phone, color: Colors.white70,), controller: phone_controller),
+                makeInput(label: "Заголовок", icon: Icon(Icons.title, color: Colors.white70,), controller: title_controller),
+                makeInput(label: "Описание", icon: Icon(Icons.text_fields, color: Colors.white70,), controller: description_controller),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 0),
                   child: Container(
@@ -194,6 +234,7 @@ class _NewRequestState extends State<NewRequest> {
                       minWidth: double.infinity,
                       height: 70,
                       onPressed: () {
+                        makerequest(title_controller.text, phone_controller.text, description_controller.text, dropdownurgencyValue);
                         // Отправить заявку
                       },
                       color: Colors.orange,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skit_active/animation/FadeAnimation.dart';
 import 'package:skit_active/login.dart';
-import 'package:skit_active/signup.dart';
 
 void main() {
   runApp(
@@ -48,6 +47,7 @@ class HomePage extends StatelessWidget {
               )/*)*/,
               Column(
                 children: <Widget>[
+                  /*FadeAnimation(1.4, */
                   /*FadeAnimation(1.4, */Padding(
                     padding: EdgeInsets.symmetric(horizontal: 0),
                     child: Container(
@@ -61,39 +61,12 @@ class HomePage extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
                         },
-                        color: Colors.white38,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)
-                        ),
-                        child: Text("Вход", style: TextStyle(
-                            letterSpacing: 1,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 23
-                        ),),
-                      ),
-                    ),
-                  )/*)*/,
-                  SizedBox(height: 20,),
-                  /*FadeAnimation(1.4, */Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 0),
-                    child: Container(
-                      padding: EdgeInsets.only(top: 3, left: 3),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: MaterialButton(
-                        minWidth: double.infinity,
-                        height: 70,
-                        onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => SignupPage()));
-                        },
                         color: Colors.orange,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15)
                         ),
-                        child: Text("Зарегистрироваться", style: TextStyle(
+                        child: Text("Вход", style: TextStyle(
                             letterSpacing: 1,
                             fontWeight: FontWeight.w600,
                             fontSize: 23
