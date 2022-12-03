@@ -32,7 +32,7 @@ class CustomBottomNavBar extends StatelessWidget {
                   ? PrimaryColor
                   : inActiveIconColor,),
                 onPressed: () =>
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyRequests(sessionToken: sessionToken,))),
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyResults(sessionToken: sessionToken,))),
               ),
               IconButton(
                 icon: Icon(Icons.add, color: MenuState.new_request == selectedMenu
