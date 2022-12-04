@@ -13,6 +13,7 @@ class CustomBottomNavBar extends StatelessWidget {
 
   final MenuState selectedMenu;
   final String? sessionToken;
+
   @override
   Widget build(BuildContext context) {
     final Color inActiveIconColor = Colors.white70;
@@ -28,25 +29,46 @@ class CustomBottomNavBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               IconButton(
-                icon: Icon(Icons.history, color: MenuState.my_requests == selectedMenu
-                  ? PrimaryColor
-                  : inActiveIconColor,),
-                onPressed: () =>
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyResults(sessionToken: sessionToken,))),
+                icon: Icon(
+                  Icons.history,
+                  color: MenuState.my_requests == selectedMenu
+                      ? PrimaryColor
+                      : inActiveIconColor,
+                ),
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MyResults(
+                              sessionToken: sessionToken,
+                            ))),
               ),
               IconButton(
-                icon: Icon(Icons.add, color: MenuState.new_request == selectedMenu
-                    ? PrimaryColor
-                    : inActiveIconColor,),
-                onPressed: () =>
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => NewRequest(sessionToken: sessionToken,))),
+                icon: Icon(
+                  Icons.add,
+                  color: MenuState.new_request == selectedMenu
+                      ? PrimaryColor
+                      : inActiveIconColor,
+                ),
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NewRequest(
+                              sessionToken: sessionToken,
+                            ))),
               ),
               IconButton(
-                icon: Icon(Icons.person, color: MenuState.profile == selectedMenu
-                    ? PrimaryColor
-                    : inActiveIconColor,),
-                onPressed: () =>
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(sessionToken: sessionToken,))),
+                icon: Icon(
+                  Icons.person,
+                  color: MenuState.profile == selectedMenu
+                      ? PrimaryColor
+                      : inActiveIconColor,
+                ),
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProfileScreen(
+                              sessionToken: sessionToken,
+                            ))),
               ),
             ],
           )),
